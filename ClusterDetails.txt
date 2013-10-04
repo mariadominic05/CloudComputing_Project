@@ -1,0 +1,98 @@
+Region: N Virginia
+
+Group1_1: ubuntu@ec2-23-23-13-20.compute-1.amazonaws.com
+Group1_2: ubuntu@ec2-50-19-72-185.compute-1.amazonaws.com
+Group1_3: ubuntu@ec2-54-224-162-70.compute-1.amazonaws.com 
+Group1_4: ubuntu@ec2-54-243-9-199.compute-1.amazonaws.com
+Group1_5: ubuntu@ec2-54-234-35-155.compute-1.amazonaws.com
+Group1_6: ubuntu@ec2-107-21-187-192.compute-1.amazonaws.com
+Master_m: ubuntu@ec2-54-234-90-86.compute-1.amazonaws.com
+
+Group1_5: ubuntu@ec2-107-21-136-2.compute-1.amazonaws.com
+Group1_6: ubuntu@ec2-54-242-110-130.compute-1.amazonaws.com
+Group1_5: 10.158.57.109
+Group1_6: 10.170.93.113
+
+Group1_1: 10.158.70.71
+Group1_2: 10.158.73.137
+Group1_3: 10.28.207.235
+Group1_4: 10.157.47.208
+
+Master_m: 10.158.76.138
+
+//Set up cluster steps:
+
+//on master machine
+
+cp pemkey.pem .ssh/id_rsa
+chmod 700 .ssh
+chmod 640 .ssh/authorized_keys
+chmod 600 .ssh/id_rsa 
+ssh-agent bash
+ssh-add
+
+
+//(do it on every slave machine)
+cp pemkey.pem .ssh/id_rsa 
+ls .ssh
+
+chmod 700 .ssh
+chmod 640 .ssh/authorized_keys
+chmod 600 .ssh/id_rsa
+ssh-agent bash
+ssh-add
+
+
+seting in only MASTER NODE
+
+(add Master hostname here)
+cd /home/ubuntu/hadoop-1.0.3/conf vi masters
+cd /home/ubuntu/hadoop-1.0.3/conf vi slaves
+cd /home/ubuntu/hadoop-1.0.3/conf more masters
+cd /home/ubuntu/hadoop-1.0.3/conf more slaves
+
+hadoop/conf/core-site.xml
+
+<configuration>   
+<property>                
+<name>fs.default.name</name>                
+<value>hdfs://ec2-54-234-90-86.compute-1.amazonaws.com:9000</value>        
+</property>
+
+
+hadoop/conf/hdfs-site.xml
+
+<configuration>
+<property>
+         
+<name>dfs.replication</name>
+         
+<value>1</value>
+     
+</property>
+<property>
+  
+<name>dfs.name.dir</name>
+  
+<value>/home/ubuntu/hadoopstore/name/</value>
+
+</property>
+
+<property>
+  
+<name>dfs.data.dir</name>
+  
+<value>/home/ubuntu/hadoopstore/data/</value>
+
+</property>
+</configuration>
+
+hadoop/conf/mapred-site.xml
+
+<configuration>   
+<property>                
+<name>mapred.job.tracker</name>                
+<value>ec2-54-234-90-86.compute-1.amazonaws.com:9001</value>        
+</property>
+</configuration>
+
